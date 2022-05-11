@@ -19,6 +19,8 @@ local function reload_mbuild()
         table.insert(mbuild.items, line)
     end
     file:close()
+    -- log the number of items loaded
+    minetest.log("action", "mbuild: "..#mbuild.items.." items loaded")
 end
 
 -- reload once on startup mbuild.items table
@@ -73,7 +75,7 @@ minetest.register_chatcommand("bgive",{
 minetest.register_chatcommand("mbuild_reload",{
     params = S(""),
     description = S("Reload mbuild items table"),
-    privillage = "builder",
+    privillage = "server",
     func = function(name, param)
         reload_mbuild()
         return true, S("Items table reloaded")
