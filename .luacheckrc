@@ -44,3 +44,4 @@ read_globals = {
         }
     },
 }
+ignore = {"542"}
