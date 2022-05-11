@@ -31,7 +31,7 @@ local function reload_mbuild()
 
     file:close()
     -- log the number of items loaded
-    minetest.log("action", "mbuild: "..#count.." items loaded")
+    minetest.log("action", "mbuild: "..count.." items loaded")
 end
 
 -- reload once on startup mbuild.items table
@@ -78,12 +78,14 @@ minetest.register_chatcommand("bgive",{
             return false, S("Item not found")
         end
         inv:add_item("main", item.." "..count)
+        -- log the action
+        minetest.log("action", name.." gave "..count.." "..item.." to "..player:get_player_name())
         return true, S("Item(s) given")
     end
 })
 
 -- chatcommand to reload mbuild.items table
-minetest.register_chatcommand("mbuild_reload",{
+minetest.register_chatcommand("bgive_reload",{
     params = S(""),
     description = S("Reload mbuild items table"),
     func = function(name, param)
