@@ -19,10 +19,20 @@ local function reload_mbuild()
         count = count + 1
         local item = string.split(line, ":")
         if item[1] and item[2] then
-            mbuild.items[item[2]] = true
+            -- if items[2] contains * then do nothing otherwise mark it false mbuild table
+            if string.find(item[2], "*") then
+                -- substitue last * with %.-
+                item[2] = string.gsub(item[2], "*", "%.-")
+            else
+                mbuild.items[item[2]] = true
+            end
+            -- mbuild.items[item[2]] = true
+            -- this will be used for names like "default:apple"
             -- support for partial names
             mbuild.items[item[1]..":"..item[2]] = true
         elseif item[1] then
+            -- this will be used for names like "apple"
+            -- will be removed in the future
             mbuild.items[item[1]] = true
         end
     end
@@ -31,6 +41,17 @@ local function reload_mbuild()
     -- log the number of items loaded
     minetest.log("action", "mbuild: "..count.." items loaded")
 end
+
+-- a function to check if an item matches a regex pattern from mbuild table
+local function check_item(item)
+    for k,_ in pairs(mbuild.items) do
+        if string.find(item, k) then
+            return true
+        end
+    end
+    return false
+end
+
 
 -- reload once on startup mbuild.items table
 reload_mbuild()
@@ -64,8 +85,8 @@ minetest.register_chatcommand("bgive",{
             return false, "Player inventory not found"
         end
         -- check if items are in allowed inventory list
-        if not mbuild.items[item] then
-            return false, "Item not allowed"
+        if not mbuild.items[item] or not check_item(item) then
+            return false, "Item/Regex not allowed"
         end
         -- before adding to inventory check if player has enough space
         if not inv:room_for_item("main", {name=item, count=count}) then
