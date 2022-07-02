@@ -89,8 +89,8 @@ minetest.register_chatcommand("bgive",{
             return false, "Player inventory not found"
         end
         -- check if items are in allowed inventory list
-        if not mbuild.items[item] or not check_item(item) then
-            return false, "Item/Regex not allowed"
+        if check_item(item) then
+            return false, "Item not allowed"
         end
         -- before adding to inventory check if player has enough space
         if not inv:room_for_item("main", {name=item, count=count}) then
