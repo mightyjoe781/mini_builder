@@ -46,6 +46,8 @@ end
 local function check_item(item)
     for k,_ in pairs(mbuild.items) do
         if string.find(item, k) then
+            -- log what we matched up against the mbuild table
+            minetest.log("action", "mbuild: "..item.." matched "..k)
             return true
         end
     end
