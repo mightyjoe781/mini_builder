@@ -65,11 +65,15 @@ minetest.register_privilege("builder", {
 minetest.register_chatcommand("bgive",{
     params = "<item> <count>",
     description = "Give player item(s)",
-    privillage = "builder",
+    privilage = "builder",
     func = function(name, param)
         local player = minetest.get_player_by_name(name)
         if not player then
             return false, "Player not found"
+        end
+        -- check privilage is builder or not
+        if not minetest.check_player_privs(name, {builder=true}) then
+            return false, "You don't have permission to use this command"
         end
         local params = param:split(" ")
         if #params < 2 then
