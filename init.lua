@@ -44,11 +44,16 @@ end
 
 -- a function to check if an item matches a regex pattern from mbuild table
 local function check_item(item)
-    for k,_ in pairs(mbuild.items) do
-        if string.find(item, k) then
-            -- log what we matched up against the mbuild table
-            minetest.log("action", "mbuild: "..item.." matched "..k)
-            return true
+    if mbuild.items[item] then
+        return true
+    else
+        -- do regex check on items from mbuild that have * in them
+        for k, _ in pairs(mbuild.items) do
+            if string.find(k, "*") then
+                if string.find(item, k) then
+                    return true
+                end
+            end
         end
     end
     return false
