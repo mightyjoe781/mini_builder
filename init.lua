@@ -19,14 +19,7 @@ local function reload_mbuild()
         count = count + 1
         local item = string.split(line, ":")
         if item[1] and item[2] then
-            -- if items[2] contains * then do nothing otherwise mark it false mbuild table
-            if string.find(item[2], "*") then
-                -- substitue last * with %.-
-                item[2] = string.gsub(item[2], "*", "%.-")
-            else
-                mbuild.items[item[2]] = true
-            end
-            -- mbuild.items[item[2]] = true
+            mbuild.items[item[2]] = true
             -- this will be used for names like "default:apple"
             -- support for partial names
             mbuild.items[item[1]..":"..item[2]] = true
@@ -50,6 +43,7 @@ local function check_item(item)
         -- do regex check on items from mbuild that have * in them
         for k, _ in pairs(mbuild.items) do
             if string.find(k, "*") then
+                k = string.gsub(k, "*", "%.-")
                 if string.find(item, k) then
                     return true
                 end
