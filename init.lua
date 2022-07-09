@@ -1,4 +1,3 @@
--- Load support for MT game translation.
 local MP = minetest.get_modpath(minetest.get_current_modname())
 
 local mbuild = {
@@ -17,17 +16,10 @@ local function reload_mbuild()
     local count = 0
     for line in file:lines() do
         count = count + 1
-        local item = string.split(line, ":")
-        if item[1] and item[2] then
-            mbuild.items[item[2]] = true
-            -- this will be used for names like "default:apple"
-            -- support for partial names
-            mbuild.items[item[1]..":"..item[2]] = true
-        elseif item[1] then
-            -- this will be used for names like "apple"
-            -- will be removed in the future
-            mbuild.items[item[1]] = true
-        end
+        -- partial naming support is removed because
+        -- all mods do not have alias defined and prevents unknown
+        -- regex issues from item names
+        mbuild.items[line] = true
     end
 
     file:close()
